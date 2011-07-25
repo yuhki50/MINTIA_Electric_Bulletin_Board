@@ -26,6 +26,7 @@
 #include <limits.h>
 //#include <assert.h>
 #include "gif.h"
+#include "../hardware.h"
 #include "../led_matrix_ctrl/led_matrix_ctrl.h"
 #include "../pff/pff.h"
 
@@ -64,7 +65,6 @@ typedef struct {
 } pixel;
 
 
-
 /*----------------------------------------------------------------------------
 
   private function
@@ -77,6 +77,7 @@ ReadOK(FILE * const file, uint8_t * const buffer, size_t const len) {
 
 	res = pf_read((WORD*)buffer, len, &bytesRead);
 //	printf("%d %d\n", bytesRead, res);
+	STATUS_LED1_TOGGLE();
 
 	return (bytesRead != 0);
 }
@@ -148,6 +149,7 @@ img_allocarray(uint16_t const cols, uint16_t const rows) {
 	if (rowIndex == NULL) {
 //		printf("out of memory allocating row index (%u rows) for an array", rows);
 		puts("E01");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 
@@ -165,6 +167,7 @@ img_allocarray(uint16_t const cols, uint16_t const rows) {
 //				printf("Arithmetic overflow multiplying %u by %u to get the "
 //						"size of a row to allocate.", cols, size);
 				puts("E02");
+				STATUS_LED0_ON();
 				exit(1);
 			}
 
@@ -174,6 +177,7 @@ img_allocarray(uint16_t const cols, uint16_t const rows) {
 //				printf("out of memory allocating Row %u (%u columns, %u bytes per tuple) "
 //						"of an array", row, cols, size);
 				puts("E03");
+				STATUS_LED0_ON();
 				exit(1);
 			}
 		}
@@ -264,6 +268,7 @@ readColorTable(FILE * gifFile, gifColorTable colorTable, uint16_t const colorTab
 		if (!ReadOK(gifFile, rgb, sizeof(rgb))) {
 //			printf("Unable to read Color %d from colorTable\n", i);
 			puts("E04");
+			STATUS_LED0_ON();
 			exit(1);
 		}
 
@@ -312,6 +317,7 @@ getDataBlock(FILE * const gifFile, uint8_t * const buf, bool * const eof, uint8_
 			if (!ReadOK(gifFile, buf, count)) {
 //				printf("EOF or error reading data portion of %d byte DataBlock from file\n", count);
 				puts("E06");
+				STATUS_LED0_ON();
 				exit(1);
 			}
 		}
@@ -391,11 +397,13 @@ doGraphicControlExtension(FILE * const gifFile, gifCtrl * const gifCtrl) {
 //		printf("EOF/error encountered reading "
 //				"1st DataBlock of Graphic Control Extension.\n");
 		puts("E08");
+		STATUS_LED0_ON();
 		exit(1);
 	} else if (length < 4) {
 //		printf("graphic control extension 1st DataBlock too short.  "
 //				"It must be at least 4 bytes; it is %d bytes.\n", length);
 		puts("E09");
+		STATUS_LED0_ON();
 		exit(1);
 	} else {
 		gifCtrl->disposal = (buf[0] >> 2) & 0x07;
@@ -595,6 +603,7 @@ initStack(stack * const stackP, uint16_t const size) {
 	if (stackP->stack == NULL) {
 //		printf("Unable to allocate %d-word stack.\n", size);
 		puts("E12");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 	stackP->sp = stackP->stack;
@@ -607,6 +616,7 @@ pushStack(stack * const stack, int const value) {
 	if (stack->sp >= stack->top) {
 //		printf("stack overflow\n");
 		puts("E13");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 	*(stack->sp++) = value;
@@ -624,6 +634,7 @@ popStack(stack * const stack) {
 	if (stack->sp <= stack->stack) {
 //		printf("stack underflow\n");
 		puts("E14");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 	return *(--stack->sp);
@@ -985,6 +996,7 @@ addPixelToRaster(uint8_t const colorTableIndex,
 //		printf("Invalid color index %u in an image that has only "
 //				"%u colors in the color table.\n", colorTableIndex, colorTableSize);
 		puts("E16");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 
@@ -1032,6 +1044,7 @@ readImageData(FILE * const gifFile,
 //				"right after an image separator; no "
 //				"image data follows.\n");
 		puts("E17");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 
@@ -1040,6 +1053,7 @@ readImageData(FILE * const gifFile,
 //				"Maximum allowable code size in GIF is %u\n", 
 //				lzwMinCodeSize, MAX_LZW_BITS);
 		puts("E18");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 
@@ -1053,6 +1067,7 @@ readImageData(FILE * const gifFile,
 			case -3:
 //				printf("Error in GIF input stream\n");
 				puts("E19");
+				STATUS_LED0_ON();
 				exit(1);
 				break;
 
@@ -1061,12 +1076,14 @@ readImageData(FILE * const gifFile,
 //						"%u x %u dimensions.  Ran out of raster data in "
 //						"row %u\n", cols, rows, imageBuffer.row);
 				puts("E20");
+				STATUS_LED0_ON();
 				exit(1);
 				break;
 
 			case -1:
 //				printf("Premature end of file; no proper GIF closing\n");
 				puts("E21");
+				STATUS_LED0_ON();
 				exit(1);
 				break;
 
@@ -1137,6 +1154,7 @@ readGifHeader(FILE * const gifFile, gifScreen * const gifScreen) {
 	if (!ReadOK(gifFile, buf, 6)) {
 //		printf("error reading magic number\n" );
 		puts("E23");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 
@@ -1144,6 +1162,7 @@ readGifHeader(FILE * const gifFile, gifScreen * const gifScreen) {
 	if (strncmp((char *)buf, "GIF", 3) != 0) {
 //		printf("File does not contain a GIF stream.  It does not start with 'GIF'.\n");
 		puts("E24");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 
@@ -1154,6 +1173,7 @@ readGifHeader(FILE * const gifFile, gifScreen * const gifScreen) {
 	if (strcmp(version, "87a") != 0 && strcmp(version, "89a")) {
 //		printf("bad version number, not '87a' or '89a'\n" );
 		puts("E25");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 
@@ -1163,6 +1183,7 @@ readGifHeader(FILE * const gifFile, gifScreen * const gifScreen) {
 	if (!ReadOK(gifFile, buf, 7)) {
 //		printf("failed to read screen descriptor\n" );
 		puts("E26");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 
@@ -1217,6 +1238,7 @@ readExtensions(FILE * const gifFile, gifCtrl * const gifCtrl, bool * const eod) 
 		if (!ReadOK(gifFile, &c, 1)) {
 //			printf("EOF / read error on image data\n" );
 			puts("E28");
+			STATUS_LED0_ON();
 			exit(1);
 		}
 
@@ -1226,6 +1248,7 @@ readExtensions(FILE * const gifFile, gifCtrl * const gifCtrl, bool * const eod) 
 			if (!ReadOK(gifFile, &c, 1)) {
 //				printf("EOF / read error on extension function code\n");
 				puts("E29");
+				STATUS_LED0_ON();
 				exit(1);
 			}
 			doExtension(gifFile, c, gifCtrl);
@@ -1253,6 +1276,7 @@ convertImage(FILE * const gifFile,
 	if (!ReadOK(gifFile, buf, 9)) {
 //		printf("couldn't read left/top/width/height\n");
 		puts("E31");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 
@@ -1280,6 +1304,7 @@ convertImage(FILE * const gifFile,
 	if (!pixels) {
 //		printf("couldn't alloc space for image\n" );
 		puts("E32");
+		STATUS_LED0_ON();
 		exit(1);
 	}
 
@@ -1291,12 +1316,16 @@ convertImage(FILE * const gifFile,
 				gifImageDesc->useInterlace, gifCtrl->transparentIndex);
 
 		writeData(gifFile, pixels, gifImageDesc->width, gifImageDesc->height);
+
+		_delay_ms(gifCtrl->delayTime * 5);  // display hold time
 	} else {
 		readImageData(gifFile, pixels, gifImageDesc->width, gifImageDesc->height, 
 				gifScreen->globalColorTable, gifScreen->globalColorTableSize,
 				gifImageDesc->useInterlace, gifCtrl->transparentIndex);
 
 		writeData(gifFile, pixels, gifImageDesc->width, gifImageDesc->height);
+
+		_delay_ms(gifCtrl->delayTime * 5);  // display hold time
 	}
 
 	img_freearray(pixels, gifImageDesc->height);
@@ -1333,6 +1362,7 @@ convertImages(FILE * const gifFile) {
 	readGifHeader(gifFile, &gifScreen);
 
 	if (gifScreen.width != LMC_WIDTH_COUNT || gifScreen.height != LMC_HEIGHT_COUNT) {
+		STATUS_LED0_ON();
 		return;
 	}
 

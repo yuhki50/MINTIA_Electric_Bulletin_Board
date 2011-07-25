@@ -19,16 +19,19 @@
 
 
 /* タイマー初期化 */
-#define INIT_TCCR0A (0)  // 標準動作
-#define INIT_TCCR0B (2)  // プリスケーラ 8分周 2
-#define INIT_TCNT0 (0x00)  // カウンター値
-#define INIT_TIMSK0 _BV(TOIE0)  // オーバーフロー割り込み有効
+#define INIT_TCCR0A _BV(WGM01)  // 標準動作
+#define INIT_TCCR0B (5)  // プリスケーラ 1024分周
+#define INIT_TCNT0 (0)  // カウンター値
+#define INIT_OCR0A (4)  // カウンター値
+#define INIT_OCR0B (0)  // カウンター値
+#define INIT_TIMSK0 _BV(OCIE0A)  // オーバーフロー割り込み有効
 
 
 /* 内部モジュール初期化 */
 #define INIT_ACSR _BV(ACD)  // アナログコンパレータOFF
-//#define INIT_PRR _BV(PRTWI) | _BV(PRTIM1) | _BV(PRTIM2) | _BV(PRADC)  // 電力削減レジスタ
-#define INIT_PRR _BV(PRTWI) | _BV(PRTIM1) | _BV(PRTIM2) | _BV(PRUSART0) | _BV(PRADC)  // 電力削減レジスタ
+//#define INIT_PRR _BV(PRTWI) | _BV(PRTIM1) | _BV(PRTIM2) | _BV(PRUSART0) | _BV(PRADC)  // 電力削減レジスタ
+#define INIT_PRR _BV(PRTWI) | _BV(PRTIM1) | _BV(PRTIM2) | _BV(PRADC)  // 電力削減レジスタ
+
 
 
 /* 内部オシレータ校正 */
@@ -43,6 +46,13 @@
 #define STATUS_LED0 PC0
 #define STATUS_LED1 PC1
 #define STATUS_PORT PORTC
+
+#define STATUS_LED0_ON() STATUS_PORT |= _BV(STATUS_LED0)
+#define STATUS_LED0_OFF() STATUS_PORT &= ~_BV(STATUS_LED0)
+#define STATUS_LED0_TOGGLE() STATUS_PORT ^= _BV(STATUS_LED0)
+#define STATUS_LED1_ON() STATUS_PORT |= _BV(STATUS_LED1)
+#define STATUS_LED1_OFF() STATUS_PORT &= ~_BV(STATUS_LED1)
+#define STATUS_LED1_TOGGLE() STATUS_PORT ^= _BV(STATUS_LED1)
 
 
 #endif

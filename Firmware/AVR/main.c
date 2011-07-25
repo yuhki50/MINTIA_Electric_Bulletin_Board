@@ -44,8 +44,6 @@ int main(void){
 	// 割り込み許可 //
 	sei();
 
-	STATUS_PORT |= _BV(STATUS_LED0) | _BV(STATUS_LED1);
-
 	// GIFファイル読み込み//
 	while(1) {
 		gif_open("mintia.gif");
@@ -70,6 +68,8 @@ static inline void timer_init(void) {
 	TCCR0A = INIT_TCCR0A;
 	TCCR0B = INIT_TCCR0B;
 	TCNT0 = INIT_TCNT0;
+	OCR0A = INIT_OCR0A;
+	OCR0B = INIT_OCR0B;
 	TIMSK0 = INIT_TIMSK0;
 }
 
@@ -98,7 +98,7 @@ static inline void osc_init(void) {
 
 
 /* タイマー0割り込み (LEDマトリックス表示) */
-ISR(TIMER0_OVF_vect) {
+ISR(TIMER0_COMPA_vect) {
 	static uint8_t rowCount = 0;
 
 	ledMatrixCtrl_writeFrameAsync((uint16_t*)frame);
