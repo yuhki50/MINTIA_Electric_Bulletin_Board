@@ -1,7 +1,7 @@
 /*
  *  USART for AVR ATmega328P
  *  usart.c
- *  by yuhki50 2011/06/19
+ *  by yuhki50 2011/07/26
  */
 
 

@@ -1,7 +1,7 @@
 /*
  *  LED Matrix Controller
  *  led_matrix_ctrl.h
- *  by yuhki50 2011/06/20
+ *  by yuhki50 2011/07/26
  */
 
 

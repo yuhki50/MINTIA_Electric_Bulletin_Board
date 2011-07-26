@@ -1,7 +1,7 @@
 /*
  *  MINTIA Electric Bulletin Board for AVR ATmega328P
  *  main.c クロック8MHzで設計
- *  by yuhki50 2011/07/01
+ *  by yuhki50 2011/07/26
  *  WinAVR 20100110
  */
 
@@ -34,7 +34,7 @@ int main(void){
 //	usart_init(USART_BAUDRATE);
 
 	// SDカードが安定するまで待つ //
-	_delay_ms(100);
+	_delay_ms(1000);
 
 	// 周辺デバイス初期化 //
 	ledMatrixCtrl_init();
@@ -43,6 +43,9 @@ int main(void){
 
 	// 割り込み許可 //
 	sei();
+
+	// スタートアップ画面の表示時間 //
+//	_delay_ms(500);
 
 	// GIFファイル読み込み//
 	while(1) {

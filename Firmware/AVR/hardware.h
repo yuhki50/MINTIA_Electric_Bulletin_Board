@@ -1,7 +1,7 @@
 /*
  *  LEDメッセンジャー ハードウェア定義 for AVR ATmega328P
  *  hardware.h
- *  by yuhki50 2010/10/30
+ *  by yuhki50 2011/07/26
  */
 
 
@@ -11,7 +11,7 @@
 
 /* ポート初期化設定 */
 #define INIT_DDRB 0b00000000
-#define INIT_DDRC 0b00000000
+#define INIT_DDRC 0b00000011
 #define INIT_DDRD 0b00000000
 #define INIT_PORTB 0b00000000
 #define INIT_PORTC 0b00000000
