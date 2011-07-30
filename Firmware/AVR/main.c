@@ -104,13 +104,12 @@ static inline void osc_init(void) {
 ISR(TIMER0_COMPA_vect) {
 	static uint8_t rowCount = 0;
 
-	ledMatrixCtrl_writeFrameAsync((uint16_t*)frame);
-
-	if(rowCount >= LMC_HEIGHT_COUNT - 1) {
+	if(rowCount >= LMC_HEIGHT_COUNT) {
 		rowCount = 0;
 		ledMatrixCtrl_disable();
 		ledMatrixCtrl_enable();
 	} else {
+		ledMatrixCtrl_writeFrameAsync((uint16_t*)frame);
 		rowCount++;
 	}
 }
