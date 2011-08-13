@@ -6,4 +6,5 @@ MicroSDに書き込んだモノクロGIFアニメーションファイルを読�
 
 h2. ファームウェアの書き込み
 
-制御ICにはAVR（ATMEL ATmega328P）及びCPLD（Xilinx XC9536）を使っており、ファームウェアを書き込む必要があります。ビルド済みのファイルが /Firmware/!*/release/!* にありますので、各開発環境から書き込んでください。
+<notextile>
+制御ICにはAVR（ATMEL ATmega328P）及びCPLD（Xilinx XC9536）を使っており、ファームウェアを書き込む必要があります。ビルド済みのファイルが <notextile>/Firmware/*/release/*</notextile> にありますので、各開発環境から書き込んでください。
