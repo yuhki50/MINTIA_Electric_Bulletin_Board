@@ -1,0 +1,14 @@
+h1. MINTIA Electronic Bulletin Board
+
+This is the small electric bulletin board which incorporating an LED matrix MINTIA case.
+It can read and display the animated GIF file written in black and white MicroSD.
+
+It can read GIF animation file (monochrome) from MicroSD, and display.
+
+s
+
+h2. Writing Firmware
+
+The chip control AVR (ATMEL ATmega328P) CPLD and (Xilinx XC9536) has been using. You need to write the firmware. Thanks to the /Firmware/*/Release/* pre-built files, please write each development environment.
+
+This use control ICs which are AVR (ATMEL ATmega328P) CPLD and (Xilinx XC9536). You need to write the firmware. There are pre-built firmwares at /Firmware/*/Release/*. Please write each development environment.
