@@ -72,10 +72,9 @@ typedef struct {
   -----------------------------------------------------------------------------*/
 #define exit(code) do{ \
 	STATUS_LED0_ON(); \
-	memset(frame, 0xFFFF, sizeof(frame)); \
+	memset((uint16_t*)frame, 0xFFFF, sizeof(frame)); \
 } while (1);
 
-//memset(frame, 0xFFFF, sizeof(frame));
 
 static inline bool
 ReadOK(FILE * const file, uint8_t * const buffer, size_t const len) {

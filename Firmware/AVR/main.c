@@ -45,7 +45,7 @@ int main(void){
 	sei();
 
 	// スタートアップ画面の表示時間 //
-//	_delay_ms(500);
+	_delay_ms(1000);
 
 	// GIFファイル読み込み//
 	while(1) {
