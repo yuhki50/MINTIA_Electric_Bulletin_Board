@@ -5,4 +5,4 @@ This is the small electric bulletin board which incorporating an LED matrix MINT
 
 h2. Writing Firmware
 
-This use control ICs which are AVR (ATMEL ATmega328P) CPLD and (Xilinx XC9536). You need to write the firmware. There are pre-built firmwares at <notextile>/Firmware/*/release/*</notextile>. Please write each development environment.
+This use control ICs which are AVR (ATMEL ATmega328P) and CPLD (Xilinx XC9536). You need to write the firmware. There are pre-built firmwares at <notextile>/Firmware/*/release/*</notextile>. Please write each development environment.
